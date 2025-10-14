@@ -21,7 +21,6 @@ jobs:
         submodules: 'recursive'
 
     # 2. Build proyek menggunakan espressif/esp-idf-ci-action
-    # Menggunakan versi v2 atau lebih tinggi untuk mendukung extra_kconfig_settings
     - name: Build ESP32-S3 Project
       uses: espressif/esp-idf-ci-action@v1
       with:
@@ -31,11 +30,14 @@ jobs:
         command: |
           idf.py build
 
-    # 3. Opsional: Simpan artefak build (.bin, .elf)
-    - name: Archive build artifacts
+    # 3. Upload hanya file binary yang diperlukan
+    - name: Archive specific build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: esp32s3-build-artifacts-v5.5.1
-        path: build/
+        name: esp32s3-essential-binaries-v5.5.1
+        path: |
+          build/bootloader/bootloader.bin
+          build/partition_table/partition-table.bin
+          build/led_wifi.bin
         if-no-files-found: error
         retention-days: 5
