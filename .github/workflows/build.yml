@@ -1,0 +1,41 @@
+name: ESP32-S3 CI Build with Secure Credentials (v5.5.1) 🚀
+
+on:
+  push:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # 1. Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    # 2. Build proyek menggunakan espressif/esp-idf-ci-action
+    # Menggunakan versi v2 atau lebih tinggi untuk mendukung extra_kconfig_settings
+    - name: Build ESP32-S3 Project
+      uses: espressif/esp-idf-ci-action@v1
+      with:
+        target: esp32s3
+        esp_idf_version: v5.5.1
+        path: ./
+        command: |
+          idf.py build
+
+    # 3. Opsional: Simpan artefak build (.bin, .elf)
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: esp32s3-build-artifacts-v5.5.1
+        path: build/
+        if-no-files-found: error
+        retention-days: 5
