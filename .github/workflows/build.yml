@@ -1,4 +1,4 @@
-name: ESP32-S3 CI Build with Secure Credentials (v5.5.1) 🚀
+name: ESP32-S3 CI Build with Secure Credentials (v5.5.1)
 
 on:
   push:
